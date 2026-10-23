@@ -203,16 +203,16 @@ A bottom-up, US-only model. Every assumption is stated so it can be checked or r
 
 ## 🆚 How it's different
 
-| | **CrewLog** | Ring app alone | Jobsite camera services (e.g. OxBlue, TrueLook) | Contractor time-tracking apps | Home-care visit verification (EVV) |
-|---|---|---|---|---|---|
-| Built for | **Homeowners** | Homeowners | Commercial builders | Contractors | Medicaid home care |
-| Hardware | **Camera you already own** | Same | Dedicated jobsite cameras | Worker's phone | Worker's phone |
-| Who controls the record | **Neutral, shared** | Homeowner only | Builder | Contractor | Agency |
-| Hours on site, automatically | ✅ | ❌ (raw clips) | Partly | ✅ (worker clocks in) | ✅ (worker clocks in) |
-| No-show alerts | ✅ | ❌ | ❌ | ❌ | Partly |
-| "Did anything change?" | ✅ daily note | ❌ | ✅ time-lapse, AI | ❌ | ❌ |
-| Filters out household and neighbours | ✅ | ❌ | n/a | n/a | n/a |
-| Worker has to do anything | No (optional doorbell tap) | No | No | Yes | Yes |
+| | **CrewLog** | Jobsite camera services (e.g. OxBlue, TrueLook) | Contractor time-tracking apps | Home-care visit verification (EVV) |
+|---|---|---|---|---|
+| Built for | **Homeowners** | Commercial builders | Contractors | Medicaid home care |
+| Hardware | **Camera you already own** | Dedicated jobsite cameras | Worker's phone | Worker's phone |
+| Who controls the record | **Neutral, shared** | Builder | Contractor | Agency |
+| Hours on site, automatically | ✅ | Partly | ✅ (worker clocks in) | ✅ (worker clocks in) |
+| No-show alerts | ✅ | ❌ | ❌ | Partly |
+| "Did anything change?" | ✅ daily note | ✅ time-lapse, AI | ❌ | ❌ |
+| Filters out household and neighbours | ✅ | n/a | n/a | n/a |
+| Worker has to do anything | No (optional doorbell tap) | No | Yes | Yes |
 
 Context: commercial jobsite cameras with AI progress tracking already exist ([TrueLook](https://www.truelook.com/lp/oxblue-alternative), [OxBlue](https://www.oxblue.com/en-gb/construction-oversight-with-ai)), and US Medicaid requires electronic visit verification for in-home care ([Medicaid.gov](https://www.medicaid.gov/medicaid/home-community-based-services/guidance/electronic-visit-verification-evv)). People already pay for proof of visit and proof of progress; homeowners just haven't had it.
 
