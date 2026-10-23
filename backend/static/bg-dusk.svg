@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+  <!-- CrewLog background: a house under construction at dusk. Original artwork. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset=".38" stop-color="#1A2438"/>
+      <stop offset=".62" stop-color="#4A3A4A"/>
+      <stop offset=".78" stop-color="#B8643A"/>
+      <stop offset=".86" stop-color="#E8A04A"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="1040" cy="760" r="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD27A" stop-opacity=".9"/>
+      <stop offset=".25" stop-color="#F2B705" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#F2B705" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#121822"/>
+      <stop offset="1" stop-color="#07090D"/>
+    </linearGradient>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8A04A" stop-opacity="0"/>
+      <stop offset="1" stop-color="#E8A04A" stop-opacity=".18"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <rect width="1600" height="1000" fill="url(#sun)"/>
+
+  <!-- stars -->
+  <g fill="#fff" opacity=".55">
+    <circle cx="120" cy="90" r="1.2"/><circle cx="310" cy="160" r=".9"/><circle cx="520" cy="70" r="1.1"/>
+    <circle cx="760" cy="130" r=".8"/><circle cx="980" cy="60" r="1.2"/><circle cx="1210" cy="140" r=".9"/>
+    <circle cx="1420" cy="80" r="1.1"/><circle cx="1530" cy="200" r=".8"/><circle cx="660" cy="220" r=".7"/>
+    <circle cx="200" cy="260" r=".7"/><circle cx="1110" cy="250" r=".7"/>
+  </g>
+
+  <!-- distant hills -->
+  <path d="M0 780 C180 730 330 760 470 735 C640 705 760 750 900 728 C1060 702 1230 745 1380 722 C1480 708 1550 720 1600 715 L1600 1000 L0 1000Z" fill="#2A2733" opacity=".85"/>
+  <path d="M0 820 C200 790 360 812 540 796 C720 780 880 815 1060 800 C1240 786 1420 812 1600 798 L1600 1000 L0 1000Z" fill="#1C1F2A"/>
+  <rect y="700" width="1600" height="160" fill="url(#haze)"/>
+
+  <!-- crane -->
+  <g stroke="#0A0E15" fill="none" stroke-linecap="square">
+    <path d="M1265 860 V330" stroke-width="10"/>
+    <path d="M1255 860 L1275 330 M1275 860 L1255 330" stroke-width="2"/>
+    <g stroke-width="2">
+      <path d="M1255 800 L1275 760 L1255 720 L1275 680 L1255 640 L1275 600 L1255 560 L1275 520 L1255 480 L1275 440 L1255 400 L1275 360"/>
+    </g>
+    <path d="M1010 340 H1470" stroke-width="9"/>
+    <path d="M1265 300 L1010 340 M1265 300 L1470 340 M1265 300 V340" stroke-width="3"/>
+    <path d="M1100 340 V505" stroke-width="2"/>
+  </g>
+  <rect x="1088" y="505" width="24" height="10" fill="#0A0E15"/>
+  <rect x="1430" y="340" width="40" height="28" fill="#0A0E15"/>
+  <circle cx="1265" cy="296" r="3.5" fill="#FF5A3C"/>
+
+  <!-- house under construction: timber frame -->
+  <g fill="none" stroke="#0A0E15" stroke-linecap="square">
+    <!-- roof trusses -->
+    <path d="M520 600 L780 450 L1040 600" stroke-width="12"/>
+    <path d="M580 600 L780 485 L980 600 M650 600 L780 525 L910 600" stroke-width="4"/>
+    <path d="M780 450 V600" stroke-width="5"/>
+    <!-- wall plate + studs -->
+    <path d="M540 600 H1020 M540 860 H1020" stroke-width="10"/>
+    <g stroke-width="5">
+      <path d="M560 600 V860 M610 600 V860 M660 600 V860 M710 600 V860 M850 600 V860 M900 600 V860 M950 600 V860 M1000 600 V860"/>
+    </g>
+    <!-- door + window openings -->
+    <path d="M740 860 V700 H820 V860" stroke-width="7"/>
+    <path d="M860 660 H990 V740 H860Z" stroke-width="5"/>
+    <path d="M565 660 H700 V740 H565Z" stroke-width="5"/>
+    <!-- bracing -->
+    <path d="M560 860 L710 600 M850 860 L1000 600" stroke-width="3"/>
+  </g>
+  <!-- warm work light inside -->
+  <rect x="745" y="705" width="70" height="155" fill="#F2B705" opacity=".18"/>
+  <rect x="866" y="666" width="118" height="68" fill="#FFD27A" opacity=".12"/>
+
+  <!-- scaffolding -->
+  <g stroke="#0A0E15" stroke-width="4" fill="none">
+    <path d="M420 860 V560 M480 860 V560 M420 560 H480 M420 640 H480 M420 720 H480 M420 800 H480"/>
+    <path d="M420 640 L480 560 M420 720 L480 640 M420 800 L480 720 M420 860 L480 800" stroke-width="2"/>
+  </g>
+
+  <!-- ground, materials, van -->
+  <path d="M0 860 H1600 V1000 H0Z" fill="url(#ground)"/>
+  <g fill="#0A0E15">
+    <rect x="1080" y="832" width="120" height="14"/><rect x="1088" y="818" width="104" height="14"/><rect x="1096" y="804" width="88" height="14"/>
+    <path d="M190 860 V808 Q190 796 202 796 H300 L336 826 H360 Q370 826 370 836 V860Z"/>
+    <circle cx="228" cy="862" r="15"/><circle cx="330" cy="862" r="15"/>
+  </g>
+  <rect x="344" y="830" width="14" height="6" fill="#F2B705" opacity=".9"/>
+  <rect x="0" y="858" width="1600" height="2" fill="#E8A04A" opacity=".25"/>
+</svg>

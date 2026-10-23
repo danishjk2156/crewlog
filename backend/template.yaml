@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: CrewLog — verified service visits from your Ring camera
+
+Parameters:
+  RingApiBase:
+    Type: String
+    Default: https://api.amazonvision.com
+  RingAccessToken:
+    Type: String
+    NoEcho: true
+  RingWebhookSecret:
+    Type: String
+    NoEcho: true
+  AlertEmail:
+    Type: String
+    Description: Email address that receives no-show alerts (confirm the SNS subscription email)
+  BedrockModelId:
+    Type: String
+    Default: us.amazon.nova-lite-v1:0
+  DemoMode:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 60
+    MemorySize: 512
+    CodeUri: .
+    Environment:
+      Variables:
+        STORE: dynamo
+        DYNAMO_TABLE: !Ref CrewlogTable
+        AI_PROVIDER: bedrock
+        BEDROCK_MODEL_ID: !Ref BedrockModelId
+        SNS_TOPIC_ARN: !Ref AlertsTopic
+        SNAPSHOT_BUCKET: !Ref SnapshotBucket
+        RING_API_BASE: !Ref RingApiBase
+        RING_ACCESS_TOKEN: !Ref RingAccessToken
+        RING_WEBHOOK_SECRET: !Ref RingWebhookSecret
+        DEMO_MODE: !Ref DemoMode
+        SCHEDULER: "false"
+        DATA_DIR: /tmp/crewlog
+
+Resources:
+  CrewlogTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: PK, AttributeType: S }
+        - { AttributeName: SK, AttributeType: S }
+        - { AttributeName: GSI1PK, AttributeType: S }
+        - { AttributeName: GSI1SK, AttributeType: S }
+      KeySchema:
+        - { AttributeName: PK, KeyType: HASH }
+        - { AttributeName: SK, KeyType: RANGE }
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - { AttributeName: GSI1PK, KeyType: HASH }
+            - { AttributeName: GSI1SK, KeyType: RANGE }
+          Projection: { ProjectionType: ALL }
+      TimeToLiveSpecification: { AttributeName: ttl, Enabled: true }
+
+  SnapshotBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - { Protocol: email, Endpoint: !Ref AlertEmail }
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler.api
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref CrewlogTable }
+        - S3CrudPolicy: { BucketName: !Ref SnapshotBucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel, bedrock:Converse]
+              Resource: "*"
+      Events:
+        Http:
+          Type: HttpApi
+
+  SchedulerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler.scheduled
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref CrewlogTable }
+        - S3CrudPolicy: { BucketName: !Ref SnapshotBucket }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertsTopic.TopicName }
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel, bedrock:Converse]
+              Resource: "*"
+      Events:
+        Every5Min:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: rate(5 minutes)
+
+Outputs:
+  AppUrl:
+    Description: Dashboard URL (also the base for the Ring webhook — append /webhooks/ring)
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"

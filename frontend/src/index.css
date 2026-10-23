@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* "Dusk on site": dark, warm theme over an illustrated construction site. Values are
+   RGB channels so Tailwind opacity modifiers (bg-ink/90, bg-alarm/10) keep working. */
+:root {
+  color-scheme: dark;
+  --paper: 11 16 26;     /* page background */
+  --ink: 238 236 230;    /* primary text (15:1 on paper) */
+  --muted: 168 175 186;  /* secondary text (8:1 on paper) */
+  --rule: 58 66 82;      /* hairlines and borders */
+  --safety: 242 183 5;   /* hi-vis yellow accent */
+  --alarm: 255 133 108;  /* warnings (7:1 on paper) */
+  --panel: 20 27 40;     /* raised surfaces */
+}
+
+body { overflow-x: hidden; background-color: rgb(var(--paper)); }
+
+/* Fixed illustrated backdrop, darkened toward the content so text stays readable. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(var(--paper) / .15) 0%, rgb(var(--paper) / .55) 45%, rgb(var(--paper) / .9) 100%),
+    radial-gradient(120% 80% at 70% 100%, transparent 40%, rgb(var(--paper) / .6) 100%),
+    url('/bg-dusk.svg') center bottom / cover no-repeat;
+  pointer-events: none;
+}
+
+:focus-visible { outline: 3px solid rgb(var(--safety)); outline-offset: 2px; border-radius: 2px; }
+::selection { background: rgb(var(--safety)); color: rgb(var(--paper)); }
+
+.glass {
+  background-color: rgb(var(--panel) / .62);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid rgb(255 255 255 / .08);
+}
+
+.tape {
+  background-color: rgb(var(--safety));
+  background-image: repeating-linear-gradient(90deg, rgba(30,43,51,.35) 0 1px, transparent 1px 12px);
+}
+@keyframes arrive { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tape-grow { transform-origin: left; animation: arrive .7s cubic-bezier(.2,.7,.2,1); }
+
+/* Week chart: bars rise from the baseline one after another, then their labels fade in. */
+@keyframes rise-bar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes fade-label { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.bar-grow { transform-origin: bottom; animation: rise-bar .8s cubic-bezier(.2,.8,.2,1) both; }
+.bar-label { animation: fade-label .5s ease-out both; }
+
+/* Page changes slide in the direction of travel (next page from the right, previous from the left). */
+@keyframes slide-from-right { from { opacity: 0; transform: translateX(48px); } to { opacity: 1; transform: none; } }
+@keyframes slide-from-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.page-next { animation: slide-from-right .45s cubic-bezier(.2,.7,.2,1) both; }
+.page-prev { animation: slide-from-left .45s cubic-bezier(.2,.7,.2,1) both; }
+.page-rise { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

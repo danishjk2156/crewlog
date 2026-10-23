@@ -1,0 +1,21 @@
+CrewLog demo: text-to-speech narration
+About 390 words, roughly 2 minutes 40 seconds at a normal TTS speed.
+Paste one scene at a time, so each clip lines up with its part of the screen recording.
+
+=== SCENE 1 (0:00 to 0:18) - Today page, nothing has happened yet ===
+You're paying a contractor forty thousand dollars for a new kitchen. But did anyone actually show up today? You're at work, and checking means scrolling through hours of doorbell video. CrewLog turns the Ring camera you already own into an honest work log.
+
+=== SCENE 2 (0:18 to 0:50) - arrive, then checkin ===
+Every time Ring sees a person or a vehicle, it sends CrewLog a signed webhook. Here, the work van and the crew arrive at five past eight. The crew taps the doorbell to check in, and the homeowner gets a notification right away. CrewLog never identifies anyone. There is no face recognition. Instead, it recognizes a work pattern: the van, a doorbell check in, and a long stay during working hours.
+
+=== SCENE 3 (0:50 to 1:18) - out, leave, checkout, neighbour ===
+The crew steps out to the truck, comes back, and checks out at three in the afternoon. Seven hours on site, logged automatically, with no timesheets. In the evening, a neighbour drops by. CrewLog lists it under also seen, but it never counts as work, and it never appears on the contractor's report.
+
+=== SCENE 4 (1:18 to 1:50) - digest --stall, then the check-in message ===
+But showing up is not the same as working. Every evening, CrewLog compares a morning and an evening photo of the work area. Today, nothing changed. Yesterday, nothing changed either. So CrewLog flags it, and drafts a polite message to the contractor. It asks a question instead of making an accusation, because some work, like plumbing behind a wall, isn't visible.
+
+=== SCENE 5 (1:50 to 2:15) - This week, then the shared report ===
+Here is the week at a glance. Four of five days worked, one no show that triggered an alert that morning, and two quiet days flagged. And here's the key. The contractor gets the exact same report. Hours and progress only. No contact details, no neighbours, and no camera footage. It's a shared record, not surveillance.
+
+=== SCENE 6 (2:15 to 2:42) - architecture or README ===
+Under the hood, CrewLog uses the Ring partner A P I with verified webhooks, a Python backend, and Amazon Web Services: DynamoDB, S 3, S N S alerts, EventBridge, and Lambda. Progress notes are built on Amazon Bedrock with Nova Lite, with an automatic offline fallback, which is what this demo shows. Next up: progress checks for construction lenders, verified contractor badges, and every recurring home service. CrewLog. Did the crew show up? Now you know.

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+backend/data/
+backend/.aws-sam/
+frontend/node_modules/
+.env
