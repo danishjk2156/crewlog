@@ -1,5 +1,14 @@
 # CrewLog demo video: script (target 2:45)
 
+> **Easiest: let the demo run itself.** With both servers running and http://127.0.0.1:8000 open in the browser:
+> ```powershell
+> cd D:\hackathonmazonackend
+> python scripts\demo_autoplay.py
+> ```
+> It resets the demo week (about a minute, don't record yet), counts down from 5 (**start recording then**), and plays all six scenes below in about 2:45, timed to `docs/video-narration.txt`. The dashboard switches pages and scrolls by itself. When it prints "Demo finished", stop recording. Use `--fast` for a 4× dry run first.
+>
+> The manual steps below still work if you'd rather drive it yourself.
+
 ## Before you record (10 minutes)
 
 **Screen layout:** browser on the left (about 2/3 of the screen), one PowerShell window on the right (about 1/3). Zoom the browser to 110–125% so text is readable on YouTube.

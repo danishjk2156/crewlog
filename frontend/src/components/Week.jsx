@@ -59,7 +59,7 @@ export default function Week({ week, tz }) {
         {week.days.map((d, i) => <Column key={d.summary.date} d={d} tz={tz} i={i} />)}
       </div>
 
-      <h2 className="mt-12 font-display text-2xl font-semibold">Progress notes</h2>
+      <h2 id="progress-notes" className="mt-12 font-display text-2xl font-semibold">Progress notes</h2>
       {digests.length === 0 && <p className="mt-2 text-muted">No progress notes this week yet.</p>}
       <ol className="mt-4 space-y-4">
         {digests.map((d) => (

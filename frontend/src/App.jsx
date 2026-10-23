@@ -9,6 +9,56 @@ const POLL_MS = 3000
 const TABS = [['today', 'Today'], ['week', 'This week'], ['setup', 'Settings']]
 const SWIPE_PX = 70
 
+// Demo autoplay (scripts/demo_autoplay.py): follow the page the script asks for.
+// Polls /api/demo/view; outside DEMO_MODE that endpoint 404s and polling stops.
+function useDemoDirector(onView) {
+  const handler = useRef(onView)
+  handler.current = onView
+  useEffect(() => {
+    let seq = null
+    let stopped = false
+    const tick = async () => {
+      if (stopped) return
+      try {
+        const res = await fetch('/api/demo/view')
+        if (!res.ok) return
+        const v = await res.json()
+        if (seq !== null && v.seq !== seq) handler.current(v)
+        seq = v.seq
+      } catch {
+        // server restarting: keep trying
+      }
+      setTimeout(tick, 1000)
+    }
+    tick()
+    return () => { stopped = true }
+  }, [])
+}
+
+// Eased scroll that doesn't depend on the browser's smooth-scroll support; jumps to the
+// target at the end in case animation frames are throttled.
+function glideTo(top) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return window.scrollTo(0, top)
+  const start = window.scrollY
+  const t0 = performance.now()
+  const DURATION = 700
+  const frame = (now) => {
+    const p = Math.min(1, (now - t0) / DURATION)
+    window.scrollTo(0, start + (top - start) * (1 - (1 - p) ** 3))
+    if (p < 1) requestAnimationFrame(frame)
+  }
+  requestAnimationFrame(frame)
+  setTimeout(() => window.scrollTo(0, top), DURATION + 300)
+}
+
+function scrollToFocus(focus) {
+  setTimeout(() => {
+    const el = focus && focus !== 'top' && document.getElementById(focus)
+    // land just below the sticky header
+    glideTo(el ? Math.max(0, el.getBoundingClientRect().top + window.scrollY - 110) : 0)
+  }, 900)
+}
+
 // Underline that glides to the active tab.
 function useIndicator(tab) {
   const navRef = useRef(null)
@@ -38,6 +88,11 @@ function Report({ token }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   useEffect(() => { api.report(token).then(setData).catch((e) => setError(e.message)) }, [token])
+  useDemoDirector((v) => {
+    if (v.view === 'reload' || (v.view !== 'report' && v.view)) window.location.href = '/'
+    else if (v.token && v.token !== token) window.location.href = `/report/${v.token}`
+    else scrollToFocus(v.focus)
+  })
   return (
     <div className="mx-auto max-w-5xl px-4 sm:px-8 py-8">
       <header className="flex items-center justify-between border-b border-rule pb-4"><Mark /></header>
@@ -73,8 +128,7 @@ export default function App() {
       if (a !== b) setDir(b > a ? 'next' : 'prev')
       return next
     })
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+    glideTo(0)
   }, [])
 
   const step = useCallback((delta) => {
@@ -88,6 +142,15 @@ export default function App() {
   const [week, setWeek] = useState(null)
   const [error, setError] = useState('')
   const [navRef, indicator] = useIndicator(job ? tab : '')
+  useDemoDirector((v) => {
+    if (reportMatch) return // the Report page follows the director itself
+    if (v.view === 'reload') window.location.href = '/'
+    else if (v.view === 'report') window.location.href = `/report/${v.token}`
+    else {
+      setTab(v.view)
+      scrollToFocus(v.focus)
+    }
+  })
 
   useEffect(() => {
     if (reportMatch) return

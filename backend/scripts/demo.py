@@ -23,6 +23,7 @@ Then:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 from datetime import date, datetime, timedelta
@@ -30,8 +31,8 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
-SANDBOX = "http://127.0.0.1:8787"
-API = "http://127.0.0.1:8000"
+SANDBOX = os.getenv("RING_SANDBOX_URL", "http://127.0.0.1:8787")
+API = os.getenv("CREWLOG_URL", "http://127.0.0.1:8000")
 WEBHOOK_URL = f"{API}/webhooks/ring"
 SECRET = "crewlog-dev-secret"
 TOKEN = {"Authorization": "Bearer sandbox-token"}

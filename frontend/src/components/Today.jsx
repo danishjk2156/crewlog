@@ -111,7 +111,7 @@ export default function Today({ data, onRunDigest }) {
           <p className="mt-4 font-display text-3xl sm:text-4xl font-medium tabular-nums">{line.detail}</p>
           {summary.total_min > 0 && <p className="mt-1 text-muted">{hours(summary.total_min)} logged by your Ring camera</p>}
           {summary.sessions.some((s) => s.checked_in) && <p className="mt-2 text-sm font-medium text-safety">Crew checked in at the doorbell</p>}
-          <AlsoSeen visits={summary.other_visits} tz={tz} />
+          <div id="also-seen"><AlsoSeen visits={summary.other_visits} tz={tz} /></div>
           {flag && <p className="mt-2 font-medium text-alarm">{FLAG_LABEL[flag]}{flag === 'no_progress' ? ': the evening still looks the same as the morning' : ''}</p>}
         </div>
         {still && (
@@ -128,7 +128,7 @@ export default function Today({ data, onRunDigest }) {
       </section>
 
       {alerts.length > 0 && (
-        <div className="mt-8 space-y-3">
+        <div id="alerts" className="mt-8 space-y-3">
           {alerts.map((a) => <Alert key={a.id} alert={a} contractor={job.contractor_name} />)}
         </div>
       )}

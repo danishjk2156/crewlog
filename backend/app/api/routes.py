@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import logging
+from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request, Response
+from pydantic import BaseModel
 
 from ..config import settings
 from ..core import checkins, snapshots
@@ -228,3 +230,30 @@ def demo_reset():
         raise HTTPException(403, "demo mode disabled")
     get_store().reset()
     return {"ok": True}
+
+
+# The autoplay script (scripts/demo_autoplay.py) "directs" the open dashboard: it sets which
+# page to show and what to scroll to, and the dashboard follows within a second.
+# In-memory and DEMO_MODE only.
+_demo_view: dict = {"seq": 0, "view": "today", "focus": "top", "token": None}
+
+
+class DemoView(BaseModel):
+    view: Literal["today", "week", "setup", "report", "reload"]
+    focus: str = "top"  # "top", or the id of an element to scroll to
+    token: str | None = None  # share token, for view="report"
+
+
+@router.get("/api/demo/view")
+def demo_view_get():
+    if not settings.demo_mode:
+        raise HTTPException(404)
+    return _demo_view
+
+
+@router.post("/api/demo/view")
+def demo_view_set(body: DemoView):
+    if not settings.demo_mode:
+        raise HTTPException(403, "demo mode disabled")
+    _demo_view.update(body.model_dump(), seq=_demo_view["seq"] + 1)
+    return _demo_view
